@@ -34,6 +34,4 @@ custom:
       refresh: 259200000 # 3?
     secret-key: Q04DkgiuhVJ9fTCrBGTBJL4rr26mzP1czFELe7L74xB7Z+TOIt3KjGpzH4CTax5lzlqlJcCIpKzNf/g+59AWrA==
   cors:
-    origins: []
-
     origins: ${PRIVATE_ORIGINS}

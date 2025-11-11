@@ -16,6 +16,10 @@ class JwtTokenProvider(
 ) {
     private val macAlgorithm: MacAlgorithm = Jwts.SIG.HS256
     private val logger = LoggerFactory.getLogger(JwtTokenProvider::class.java)
+    private val jwtParser: JwtParser
+        get() = Jwts.parser()
+            .verifyWith(secretKey)
+            .build()
 
     fun issueTokenPair(user: User): TokenPair {
         return TokenPair(
@@ -49,10 +53,6 @@ class JwtTokenProvider(
         jwtParser.parseSignedClaims(token)
     }
 
-    private val jwtParser: JwtParser
-        get() = Jwts.parser()
-            .verifyWith(secretKey)
-            .build()
 
     fun parseJwt(token: String): TokenBody {
         val claimsJws = jwtParser.parseSignedClaims(token)
