@@ -11,6 +11,7 @@ enum class ErrorCode(
 ) {
     // Auth & User
     UNAUTHORIZED(401, "인증되지 않은 사용자입니다."),
+    AUTHORITY_FORBIDDEN(403, "권한이 없습니다."),
     FORBIDDEN(403, "권한이 없습니다."),
     USER_NOT_FOUND(404, "사용자를 찾을 수 없습니다."),
     EXPIRED_TOKEN(401, "만료된 토큰입니다."),
@@ -18,7 +19,9 @@ enum class ErrorCode(
 
     // Common
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),
-    BAD_REQUEST(400, "잘못된 요청입니다.");
+    BAD_REQUEST(400, "잘못된 요청입니다."),
+    API_NOT_FOUND(404, "요청한 API를 찾을 수 없습니다."),
+    DATA_CONFLICT(409, "데이터 무결성 위반이 발생했습니다.");
 
     fun toException(): CustomException {
         return CustomException(this)
