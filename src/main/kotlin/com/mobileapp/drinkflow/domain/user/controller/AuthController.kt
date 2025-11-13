@@ -50,4 +50,15 @@ class AuthController(
         )
         return ResponseEntity.ok().build()
     }
+
+    @PostMapping("/logout")
+    fun logout(
+        response: HttpServletResponse,
+        @CookieValue refreshToken: String
+    ): ResponseEntity<Void> {
+        authService.logout(refreshToken)
+        TokenResponseHandler.clearTokens(response)
+
+        return ResponseEntity.noContent().build()
+    }
 }

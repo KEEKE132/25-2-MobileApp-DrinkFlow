@@ -90,4 +90,16 @@ class AuthService(
         }
         throw ErrorCode.INVALID_TOKEN.toException()
     }
+
+    @Transactional
+    fun logout(refreshToken: String) {
+        try {
+            jwtTokenProvider.validate(refreshToken)
+        } catch (e: java.lang.Exception) {
+            throw ErrorCode.INVALID_TOKEN.toException()
+        }
+        refreshTokenRepository.deleteByToken(refreshToken)
+    }
+
+
 }
