@@ -4,10 +4,9 @@ import java.security.Principal
 
 
 class JwtPrincipal(
-    private val id: Long,
-    private val username: String
+    val id: Long,
+    val username: String
 ) : Principal {
-
 
     override fun getName(): String {
         return username;
