@@ -3,11 +3,13 @@ package com.mobileapp.drinkflow.domain.user.service
 import com.mobileapp.drinkflow.core.jwt.JwtTokenProvider
 import com.mobileapp.drinkflow.core.jwt.RefreshToken
 import com.mobileapp.drinkflow.core.jwt.RefreshTokenRepository
+import com.mobileapp.drinkflow.core.jwt.TokenPair
 import com.mobileapp.drinkflow.core.security.CustomUserDetails
 import com.mobileapp.drinkflow.domain.user.dto.LoginDto
 import com.mobileapp.drinkflow.domain.user.dto.LoginRequest
 import com.mobileapp.drinkflow.domain.user.dto.SignupRequest
 import com.mobileapp.drinkflow.domain.user.dto.UserResponse
+import com.mobileapp.drinkflow.domain.user.entity.User
 import com.mobileapp.drinkflow.domain.user.repository.UserRepository
 import com.mobileapp.drinkflow.domain.user.util.UserMapper
 import com.mobileapp.drinkflow.global.exception.ErrorCode
@@ -44,20 +46,48 @@ class AuthService(
 
         val tokenPair = jwtTokenProvider.issueTokenPair(userDetails.user)
 
-        val userRefreshToken = refreshTokenRepository.findByUserId(userDetails.user.id)?.let {
+        refreshTokenRepository.findByUserId(userDetails.user.id)?.let {
             refreshTokenRepository.delete(it)
             refreshTokenRepository.flush()
         }
 
-        val refreshToken = RefreshToken(
-            token = tokenPair.refreshToken,
-            user = userDetails.user
-        )
-        refreshTokenRepository.save(refreshToken)
+        saveRefreshToken(tokenPair, userDetails.user)
 
         return LoginDto(
             UserMapper.toUserResponse(userDetails.user),
             tokenPair
         )
+    }
+
+    private fun saveRefreshToken(
+        tokenPair: TokenPair,
+        user: User
+    ) {
+        val refreshToken = RefreshToken(
+            token = tokenPair.refreshToken,
+            user = user
+        )
+        refreshTokenRepository.save(refreshToken)
+    }
+
+    @Transactional
+    fun refresh(refreshToken: String): TokenPair {
+        try {
+            jwtTokenProvider.validate(refreshToken)
+        } catch (e: Exception) {
+            throw ErrorCode.INVALID_TOKEN.toException()
+        }
+
+        refreshTokenRepository.findByToken(refreshToken)?.let {
+            val tokenpair = jwtTokenProvider.issueTokenPair(it.user)
+
+            refreshTokenRepository.delete(it)
+            refreshTokenRepository.flush()
+
+            saveRefreshToken(tokenpair, it.user)
+
+            return tokenpair
+        }
+        throw ErrorCode.INVALID_TOKEN.toException()
     }
 }
