@@ -1,6 +1,7 @@
 package com.mobileapp.drinkflow.domain.user.entity
 
 import com.mobileapp.drinkflow.domain.drinkRecord.DrinkRecord
+import com.mobileapp.drinkflow.domain.userProfile.UserProfile
 import jakarta.persistence.*
 
 enum class UserType {
@@ -26,6 +27,8 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
         protected set
-
+    
+    @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
+    var profile: UserProfile? = null
 
 }
