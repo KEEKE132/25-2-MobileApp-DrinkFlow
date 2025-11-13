@@ -1,7 +1,7 @@
 package com.mobileapp.drinkflow.domain.user.entity
 
+import com.mobileapp.drinkflow.domain.drinkRecord.DrinkRecord
 import jakarta.persistence.*
-import java.time.LocalDateTime
 
 enum class UserType {
     MEMBER, MANAGER, ADMIN
@@ -18,9 +18,14 @@ class User(
 
     @Column(nullable = false)
     var password: String,
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var drinkRecords: MutableList<DrinkRecord> = mutableListOf()
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
         protected set
+
+
 }
