@@ -39,7 +39,7 @@ class JwtTokenProvider(
     private fun issue(user: User, expTime: Long): String {
         return Jwts.builder()
             .subject(user.id.toString())
-            .claim("email", user.username)
+            .claim("user", user.username)
             .issuedAt(Date())
             .expiration(Date(Date().time + expTime))
             .signWith(secretKey, macAlgorithm)
