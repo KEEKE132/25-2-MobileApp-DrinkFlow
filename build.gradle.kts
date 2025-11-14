@@ -38,6 +38,9 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
+
+    // Swagger/OpenAPI
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 }
 
 kotlin {
