@@ -6,6 +6,10 @@ import jakarta.persistence.*
 @Entity
 class UserProfile(
 
+    var age: Int,
+    var gender: Gender,
+    var height: Int,
+
     @OneToOne(mappedBy = "profile")
     val user: User
 ) {
@@ -13,4 +17,8 @@ class UserProfile(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
         protected set
+}
+
+enum class Gender {
+    MALE, FEMALE, UNKNOWN
 }

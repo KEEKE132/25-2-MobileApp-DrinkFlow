@@ -9,6 +9,8 @@ import java.time.LocalDateTime
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 class DrinkRecord(
+    var amount: Int,
+
     @Column(nullable = false)
     @CreatedDate
     val date: LocalDateTime,
