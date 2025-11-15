@@ -37,7 +37,8 @@ class TokenResponseHandler(
                 .secure(false)
                 .path(if (profile == "dev") "/auth" else "/api/auth")
                 .maxAge(3 * 24 * 60 * 60L)
-                .sameSite(if (profile == "dev") "Lax" else "None")
+                .sameSite("Lax")
+                //.sameSite(if (profile == "dev") "Lax" else "None")
                 .build()
 
             response.addHeader(
