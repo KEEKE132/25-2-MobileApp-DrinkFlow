@@ -27,6 +27,6 @@ custom:
     expire:
       access: 3600000
       refresh: 259200000
-    secret-key: Q04DkgiuhVJ9fTCrBGTBJL4rr26mzP1czFELe7L74xB7Z+TOIt3KjGpzH4CTax5lzlqlJcCIpKzNf/g+59AWrA==
+    secret-key: ${SECRET_KEY}
   cors:
     origins: ${PRIVATE_ORIGINS}
