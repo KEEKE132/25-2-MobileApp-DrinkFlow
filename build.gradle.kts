@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.mobileApp"
-version = "0.0.1-SNAPSHOT"
+version = ""
 description = "DrinkFlow"
 
 java {
