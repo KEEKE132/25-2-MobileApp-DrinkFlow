@@ -17,6 +17,7 @@ class WebConfig : WebMvcConfigurer {
             "http://localhost:8080",
             "http://localhost:5500",
             "http://localhost:5173",
+            "http://http://drinkflow.p-e.kr"
         )
         allowedOrigins.addAll(corsOrigins)
 
