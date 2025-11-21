@@ -32,8 +32,8 @@ class UserProfileService(
     }
 
     @Transactional
-    fun create(userId: Long, request: UserProfileCreateRequest): UserProfileResponse {
-        val user = userRepository.findByIdOrNull(userId)
+    fun create(request: UserProfileCreateRequest): UserProfileResponse {
+        val user = userRepository.findByIdOrNull(request.userId)
             ?: throw ErrorCode.USER_NOT_FOUND.toException()
 
         // Check if user already has a profile

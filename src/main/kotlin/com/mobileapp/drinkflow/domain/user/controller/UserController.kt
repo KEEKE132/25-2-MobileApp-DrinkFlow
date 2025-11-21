@@ -1,7 +1,7 @@
 package com.mobileapp.drinkflow.domain.user.controller
 
 import com.mobileapp.drinkflow.core.jwt.JwtPrincipal
-import com.mobileapp.drinkflow.domain.user.dto.UserResponse
+import com.mobileapp.drinkflow.domain.user.dto.UserDetailResponse
 import com.mobileapp.drinkflow.domain.user.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -16,7 +16,7 @@ class UserController(
 ) {
 
     @GetMapping("/me")
-    fun me(@AuthenticationPrincipal jwtPrincipal: JwtPrincipal): ResponseEntity<UserResponse> {
+    fun me(@AuthenticationPrincipal jwtPrincipal: JwtPrincipal): ResponseEntity<UserDetailResponse> {
         return ResponseEntity.ok(userService.findById(jwtPrincipal.id))
     }
 }

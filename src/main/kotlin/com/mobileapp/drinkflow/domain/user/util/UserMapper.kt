@@ -1,8 +1,10 @@
 package com.mobileapp.drinkflow.domain.user.util
 
 import com.mobileapp.drinkflow.domain.user.dto.SignupRequest
+import com.mobileapp.drinkflow.domain.user.dto.UserDetailResponse
 import com.mobileapp.drinkflow.domain.user.dto.UserResponse
 import com.mobileapp.drinkflow.domain.user.entity.User
+import com.mobileapp.drinkflow.domain.userProfile.dto.UserProfileResponse
 
 object UserMapper {
     fun fromSignupRequest(request: SignupRequest, encodedPassword: String): User {
@@ -15,8 +17,26 @@ object UserMapper {
 
     fun toUserResponse(user: User): UserResponse {
         return UserResponse(
+            id = user.id,
             username = user.username,
             name = user.name
+        )
+    }
+
+    fun toUserDetailResponse(user: User): UserDetailResponse {
+        return UserDetailResponse(
+            id = user.id,
+            username = user.username,
+            name = user.name,
+            profile = user.profile?.let {
+                UserProfileResponse(
+                    id = it.id,
+                    age = it.age,
+                    gender = it.gender,
+                    height = it.height,
+                    userId = user.id
+                )
+            }
         )
     }
 }

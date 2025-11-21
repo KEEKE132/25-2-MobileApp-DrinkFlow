@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull
 
 data class UserProfileCreateRequest(
     @field:NotNull
+    val userId: Long,
+
+    @field:NotNull
     @field:Min(value = 1)
     val age: Int,
 

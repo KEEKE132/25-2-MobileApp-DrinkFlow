@@ -8,6 +8,7 @@ import jakarta.persistence.*
 class UserProfile(
 
     var age: Int,
+    @Enumerated(EnumType.STRING)
     var gender: Gender,
     var height: Int,
 
