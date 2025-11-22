@@ -15,6 +15,7 @@ enum class ErrorCode(
     FORBIDDEN(403, "권한이 없습니다."),
     USER_NOT_FOUND(404, "사용자를 찾을 수 없습니다."),
     USER_PROFILE_NOT_FOUND(404, "사용자 프로필을 찾을 수 없습니다."),
+    DRINK_RECORD_NOT_FOUND(404, "음수 기록을 찾을 수 없습니다."),
     EXPIRED_TOKEN(401, "만료된 토큰입니다."),
     INVALID_TOKEN(401, "유효하지 않은 토큰입니다."),
 
@@ -32,4 +33,3 @@ enum class ErrorCode(
         return CustomException(this, message ?: this.message)
     }
 }
-
