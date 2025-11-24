@@ -24,7 +24,7 @@ class FriendshipController(
         @AuthenticationPrincipal jwtPrincipal: JwtPrincipal,
         @RequestBody request: FriendshipRequest
     ): ResponseEntity<FriendshipResponse> {
-        val response = friendShipService.sendFriendRequest(jwtPrincipal.id, request.friendId)
+        val response = friendShipService.sendFriendRequest(jwtPrincipal.id, request.friendUsername)
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 

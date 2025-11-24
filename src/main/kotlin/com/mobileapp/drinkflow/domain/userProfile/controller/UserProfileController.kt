@@ -28,21 +28,21 @@ class UserProfileController(
     /**
      * 프로필을 업데이트합니다.
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/{profileId}")
     fun updateProfile(
-        @PathVariable id: Long,
+        @PathVariable profileId: Long,
         @Valid @RequestBody request: UserProfileUpdateRequest
     ): ResponseEntity<UserProfileResponse> {
-        val profile = userProfileService.update(id, request)
+        val profile = userProfileService.update(profileId, request)
         return ResponseEntity.ok(profile)
     }
 
     /**
      * 프로필을 삭제합니다.
      */
-    @DeleteMapping("/{id}")
-    fun deleteProfile(@PathVariable id: Long): ResponseEntity<Void> {
-        userProfileService.delete(id)
+    @DeleteMapping("/{profileId}")
+    fun deleteProfile(@PathVariable profileId: Long): ResponseEntity<Void> {
+        userProfileService.delete(profileId)
         return ResponseEntity.noContent().build()
     }
 }

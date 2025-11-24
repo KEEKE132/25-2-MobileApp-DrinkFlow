@@ -39,7 +39,7 @@ class DrinkRecordController(
         description =
             """
     userId가 없으면 현재 로그인한 유저 정보 사용
-    startDate나 endDate 중 하나라도 없으면 전체기간 조회
+    startDate나 endDate 중 하나라도 없으면 오늘날짜만 조회
     """
     )
     fun list(
@@ -52,19 +52,15 @@ class DrinkRecordController(
         endDate: LocalDateTime?,
         @RequestParam(required = false) userId: Long?,
     ): ResponseEntity<DrinkRecordPageResponse> {
+        var start = startDate
+        var end = endDate
+        if (startDate == null || endDate == null) {
+            start = LocalDateTime.now().toLocalDate().atStartOfDay()
+            end = LocalDateTime.now().toLocalDate().atStartOfDay().plusDays(1)
+        }
 
         val targetUserId = userId ?: principal.id
-        val response = drinkRecordService.list(targetUserId, page, size, startDate, endDate)
-        return ResponseEntity.ok(response)
-    }
-
-    @PatchMapping("/{id}")
-    fun update(
-        @AuthenticationPrincipal principal: JwtPrincipal,
-        @PathVariable id: Long,
-        @Valid @RequestBody request: DrinkRecordRequest
-    ): ResponseEntity<DrinkRecordResponse> {
-        val response = drinkRecordService.update(principal.id, id, request)
+        val response = drinkRecordService.list(targetUserId, page, size, start, end)
         return ResponseEntity.ok(response)
     }
 

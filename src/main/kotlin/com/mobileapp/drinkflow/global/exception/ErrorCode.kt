@@ -21,6 +21,7 @@ enum class ErrorCode(
 
     // Friendship
     FRIENDSHIP_NOT_FOUND(404, "친구 관계를 찾을 수 없습니다."),
+    FRIENDSHIP_BLOCKED(409, "차단되어 있습니다."),
     FRIENDSHIP_ALREADY_EXISTS(409, "이미 친구 관계가 존재합니다."),
     CANNOT_ADD_SELF_AS_FRIEND(400, "자기 자신을 친구로 추가할 수 없습니다."),
     FRIENDSHIP_NOT_PENDING(400, "대기 중인 친구 요청이 아닙니다."),

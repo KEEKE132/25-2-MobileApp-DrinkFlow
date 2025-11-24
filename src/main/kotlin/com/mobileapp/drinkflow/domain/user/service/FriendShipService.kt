@@ -9,6 +9,7 @@ import com.mobileapp.drinkflow.domain.user.repository.FriendshipRepository
 import com.mobileapp.drinkflow.domain.user.repository.UserRepository
 import com.mobileapp.drinkflow.domain.user.util.FriendShipMapper
 import com.mobileapp.drinkflow.global.exception.ErrorCode
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,20 +23,25 @@ class FriendShipService(
      * 친구 요청 보내기
      */
     @Transactional
-    fun sendFriendRequest(userId: Long, friendId: Long): FriendshipResponse {
+    fun sendFriendRequest(userId: Long, friendUsername: String): FriendshipResponse {
+        val user =
+            userRepository.findByIdOrNull(userId) ?: throw ErrorCode.USER_NOT_FOUND.toException()
         // 자기 자신에게 친구 요청을 보낼 수 없음
-        if (userId == friendId) {
+        if (user.username == friendUsername) {
             throw ErrorCode.CANNOT_ADD_SELF_AS_FRIEND.toException()
         }
-
-        val user = userRepository.findById(userId)
-            .orElseThrow { ErrorCode.USER_NOT_FOUND.toException() }
-        val friend = userRepository.findById(friendId)
-            .orElseThrow { ErrorCode.USER_NOT_FOUND.toException() }
+        val friend = userRepository.findByUsername(friendUsername)
+            ?: throw ErrorCode.USER_NOT_FOUND.toException()
 
         // 이미 친구 관계가 존재하는지 확인
-        val existingFriendships = friendshipRepository.findFriendshipBetweenUsers(userId, friendId)
+        val existingFriendships =
+            friendshipRepository.findFriendshipBetweenUsers(userId, friend.id!!)
         if (existingFriendships.isNotEmpty()) {
+            existingFriendships.forEach { e ->
+                if (e.status == FriendshipStatus.BLOCKED) {
+                    throw ErrorCode.FRIENDSHIP_BLOCKED.toException()
+                }
+            }
             throw ErrorCode.FRIENDSHIP_ALREADY_EXISTS.toException()
         }
 
