@@ -5,6 +5,7 @@ import com.mobileapp.drinkflow.domain.drinkRecord.dto.DrinkRecordPageResponse
 import com.mobileapp.drinkflow.domain.drinkRecord.dto.DrinkRecordRequest
 import com.mobileapp.drinkflow.domain.drinkRecord.dto.DrinkRecordResponse
 import com.mobileapp.drinkflow.domain.drinkRecord.service.DrinkRecordService
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -34,6 +35,13 @@ class DrinkRecordController(
     }
 
     @GetMapping
+    @Operation(
+        description =
+            """
+    userId가 없으면 현재 로그인한 유저 정보 사용
+    startDate나 endDate 중 하나라도 없으면 전체기간 조회
+    """
+    )
     fun list(
         @AuthenticationPrincipal principal: JwtPrincipal,
         @RequestParam(defaultValue = "0") page: Int,

@@ -16,5 +16,20 @@ interface DrinkRecordRepository : JpaRepository<DrinkRecord, Long> {
         end: LocalDateTime,
         pageable: Pageable
     ): Page<DrinkRecord>
+
+//    @Query(
+//        """
+//    SELECT COALESCE(SUM(d.amount), 0)
+//    FROM DrinkRecord d
+//    WHERE d.user.id = :userId
+//    AND d.date >= :startDate
+//    AND d.date < :endDate
+//    """
+//    )
+//    fun sumAmountByUserIdAndDateBetween(
+//        userId: Long,
+//        startDate: LocalDateTime,
+//        endDate: LocalDateTime
+//    ): Int
 }
 
