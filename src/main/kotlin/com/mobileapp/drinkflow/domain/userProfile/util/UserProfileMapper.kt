@@ -11,6 +11,8 @@ object UserProfileMapper {
             age = request.age,
             gender = request.gender,
             height = request.height,
+            weight = request.weight,
+            activityLevel = request.activityLevel,
             user = user
         )
     }
@@ -21,6 +23,8 @@ object UserProfileMapper {
             age = userProfile.age,
             gender = userProfile.gender,
             height = userProfile.height,
+            weight = userProfile.weight,
+            activityLevel = userProfile.activityLevel,
             userId = userProfile.user.id
         )
     }

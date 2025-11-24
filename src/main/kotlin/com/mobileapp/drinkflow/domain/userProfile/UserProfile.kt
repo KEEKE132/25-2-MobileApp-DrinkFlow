@@ -8,9 +8,16 @@ import jakarta.persistence.*
 class UserProfile(
 
     var age: Int,
+
+    var weight: Double,
+
     @Enumerated(EnumType.STRING)
     var gender: Gender,
-    var height: Int,
+
+    @Enumerated(EnumType.STRING)
+    var activityLevel: ActivityLevel,
+
+    var height: Double,
 
     @OneToOne(mappedBy = "profile")
     val user: User
@@ -24,9 +31,15 @@ class UserProfile(
         request.age?.let { this.age = it }
         request.gender?.let { this.gender = it }
         request.height?.let { this.height = it }
+        request.weight?.let { this.weight = it }
+        request.activityLevel?.let { this.activityLevel = it }
     }
 }
 
 enum class Gender {
     MALE, FEMALE, UNKNOWN
+}
+
+enum class ActivityLevel {
+    LOW, MEDIUM, HIGH
 }
