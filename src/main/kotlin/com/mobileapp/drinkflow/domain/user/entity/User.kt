@@ -21,13 +21,16 @@ class User(
     var password: String,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var drinkRecords: MutableList<DrinkRecord> = mutableListOf()
+    var drinkRecords: MutableList<DrinkRecord> = mutableListOf(),
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var friendships: MutableList<Friendship> = mutableListOf()
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
         protected set
-    
+
     @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
     var profile: UserProfile? = null
 

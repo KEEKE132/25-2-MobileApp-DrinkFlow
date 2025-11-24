@@ -34,6 +34,8 @@ object UserMapper {
                     age = it.age,
                     gender = it.gender,
                     height = it.height,
+                    weight = it.weight,
+                    activityLevel = it.activityLevel,
                     userId = user.id
                 )
             }

@@ -19,6 +19,13 @@ enum class ErrorCode(
     EXPIRED_TOKEN(401, "만료된 토큰입니다."),
     INVALID_TOKEN(401, "유효하지 않은 토큰입니다."),
 
+    // Friendship
+    FRIENDSHIP_NOT_FOUND(404, "친구 관계를 찾을 수 없습니다."),
+    FRIENDSHIP_ALREADY_EXISTS(409, "이미 친구 관계가 존재합니다."),
+    CANNOT_ADD_SELF_AS_FRIEND(400, "자기 자신을 친구로 추가할 수 없습니다."),
+    FRIENDSHIP_NOT_PENDING(400, "대기 중인 친구 요청이 아닙니다."),
+    NOT_AUTHORIZED_TO_RESPOND(403, "이 친구 요청에 응답할 권한이 없습니다."),
+
     // Common
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),
     BAD_REQUEST(400, "잘못된 요청입니다."),
