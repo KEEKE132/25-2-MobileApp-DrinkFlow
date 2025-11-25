@@ -83,14 +83,14 @@ class DrinkRecordService(
         drinkRecordRepository.delete(record)
     }
 
-//    @Transactional(readOnly = true)
-//    fun getDateAmount(userId: Long, date: LocalDateTime): Int? {
-//        val startDate = date.toLocalDate().atStartOfDay()
-//        val endDate = date.toLocalDate().plusDays(1).atStartOfDay()
-//        val amount =
-//            drinkRecordRepository.sumAmountByUserIdAndDateBetween(userId, startDate, endDate)
-//
-//        return amount
-//    }
+    @Transactional(readOnly = true)
+    fun getDateAmount(userId: Long, date: LocalDateTime): Int? {
+        val startDate = date.toLocalDate().atStartOfDay()
+        val endDate = date.toLocalDate().plusDays(1).atStartOfDay()
+        val amount =
+            drinkRecordRepository.sumAmountByUserIdAndDateBetween(userId, startDate, endDate)
+
+        return amount
+    }
 }
 

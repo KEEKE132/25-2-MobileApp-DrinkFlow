@@ -4,6 +4,7 @@ import com.mobileapp.drinkflow.domain.drinkRecord.DrinkRecord
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
@@ -17,19 +18,19 @@ interface DrinkRecordRepository : JpaRepository<DrinkRecord, Long> {
         pageable: Pageable
     ): Page<DrinkRecord>
 
-//    @Query(
-//        """
-//    SELECT COALESCE(SUM(d.amount), 0)
-//    FROM DrinkRecord d
-//    WHERE d.user.id = :userId
-//    AND d.date >= :startDate
-//    AND d.date < :endDate
-//    """
-//    )
-//    fun sumAmountByUserIdAndDateBetween(
-//        userId: Long,
-//        startDate: LocalDateTime,
-//        endDate: LocalDateTime
-//    ): Int
+    @Query(
+        """
+    SELECT COALESCE(SUM(d.amount), 0)
+    FROM DrinkRecord d
+    WHERE d.user.id = :userId
+    AND d.date >= :startDate
+    AND d.date < :endDate
+    """
+    )
+    fun sumAmountByUserIdAndDateBetween(
+        userId: Long,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): Int
 }
 

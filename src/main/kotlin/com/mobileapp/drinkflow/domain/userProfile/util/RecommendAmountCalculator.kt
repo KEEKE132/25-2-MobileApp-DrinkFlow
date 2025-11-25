@@ -7,7 +7,7 @@ import com.mobileapp.drinkflow.domain.userProfile.UserProfile
 object RecommendAmountCalculator {
 
     fun calculateRecommendedAmount(profile: UserProfile): Int {
-        var result = profile.weight * 35.0
+        var result = profile.weight * 30.0
 
         if (profile.gender == Gender.MALE) result *= 1.05
         if (profile.age >= 70) result *= 0.90  // 0.95 * 0.95

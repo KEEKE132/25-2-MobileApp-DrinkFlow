@@ -24,7 +24,7 @@ object UserMapper {
         )
     }
 
-    fun toUserDetailResponse(user: User): UserDetailResponse {
+    fun toUserDetailResponse(user: User, todayAmount: Int): UserDetailResponse {
         return UserDetailResponse(
             id = user.id,
             username = user.username,
@@ -38,6 +38,7 @@ object UserMapper {
                     weight = it.weight,
                     activityLevel = it.activityLevel,
                     userId = user.id,
+                    todayAmount = todayAmount,
                     recommendAmount = calculateRecommendedAmount(it)
                 )
             }

@@ -1,5 +1,6 @@
 package com.mobileapp.drinkflow.domain.user.service
 
+import com.mobileapp.drinkflow.domain.drinkRecord.service.DrinkRecordService
 import com.mobileapp.drinkflow.domain.user.dto.FriendListResponse
 import com.mobileapp.drinkflow.domain.user.dto.FriendResponse
 import com.mobileapp.drinkflow.domain.user.dto.FriendshipResponse
@@ -12,11 +13,13 @@ import com.mobileapp.drinkflow.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class FriendShipService(
     private val friendshipRepository: FriendshipRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val drinkRecordService: DrinkRecordService
 ) {
 
     /**
@@ -165,8 +168,14 @@ class FriendShipService(
     fun getMyFriends(userId: Long): FriendListResponse {
         val friendships =
             friendshipRepository.findByUserIdAndStatus(userId, FriendshipStatus.ACCEPTED)
-
-        val friends = FriendShipMapper.toFriendResponseList(friendships)
+        val friendList = friendships.stream().map { it.friend }.toList()
+        val todayList = friendList.stream().map { f ->
+            drinkRecordService.getDateAmount(
+                f.id!!,
+                LocalDateTime.now()
+            ) ?: 0
+        }.toList()
+        val friends = FriendShipMapper.toFriendDetailList(friendList, todayList)
         return FriendShipMapper.toFriendListResponse(friends)
     }
 

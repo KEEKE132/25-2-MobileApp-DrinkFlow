@@ -3,6 +3,7 @@ package com.mobileapp.drinkflow.domain.user.util
 import com.mobileapp.drinkflow.domain.user.dto.FriendListResponse
 import com.mobileapp.drinkflow.domain.user.dto.FriendResponse
 import com.mobileapp.drinkflow.domain.user.dto.FriendshipResponse
+import com.mobileapp.drinkflow.domain.user.dto.UserDetailResponse
 import com.mobileapp.drinkflow.domain.user.entity.Friendship
 import com.mobileapp.drinkflow.domain.user.entity.User
 
@@ -52,12 +53,18 @@ object FriendShipMapper {
     /**
      * Friendship 리스트를 FriendResponse 리스트로 변환 (친구 목록용)
      */
-    fun toFriendResponseList(friendships: List<Friendship>): List<FriendResponse> {
-        return friendships.map { friendship ->
+    fun toFriendDetailList(friends: List<User>, todayList: List<Int>): List<UserDetailResponse> {
+        return friends.zip(todayList).map { (user, today) ->
+            UserMapper.toUserDetailResponse(user, today)
+        }
+    }
+
+    fun toFriendResponseList(friends: List<Friendship>): List<FriendResponse> {
+        return friends.map { f ->
             FriendResponse(
-                id = friendship.friend.id,
-                name = friendship.friend.name,
-                username = friendship.friend.username
+                id = f.friend.id,
+                name = f.friend.name,
+                username = f.friend.username
             )
         }
     }
@@ -65,7 +72,7 @@ object FriendShipMapper {
     /**
      * FriendResponse 리스트를 FriendListResponse로 변환
      */
-    fun toFriendListResponse(friends: List<FriendResponse>): FriendListResponse {
+    fun toFriendListResponse(friends: List<UserDetailResponse>): FriendListResponse {
         return FriendListResponse(friends = friends)
     }
 

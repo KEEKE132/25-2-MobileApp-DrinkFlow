@@ -1,5 +1,6 @@
 package com.mobileapp.drinkflow.domain.userProfile.service
 
+import com.mobileapp.drinkflow.domain.drinkRecord.service.DrinkRecordService
 import com.mobileapp.drinkflow.domain.user.repository.UserRepository
 import com.mobileapp.drinkflow.domain.userProfile.dto.UserProfileCreateRequest
 import com.mobileapp.drinkflow.domain.userProfile.dto.UserProfileResponse
@@ -11,19 +12,24 @@ import com.mobileapp.drinkflow.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class UserProfileService(
     private val userProfileRepository: UserProfileRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val drinkRecordService: DrinkRecordService
 ) {
 
     @Transactional(readOnly = true)
     fun findById(id: Long): UserProfileResponse {
         val userProfile = userProfileRepository.findByIdOrNull(id)
             ?: throw ErrorCode.USER_PROFILE_NOT_FOUND.toException()
+        val today =
+            drinkRecordService.getDateAmount(userProfile.user.id!!, LocalDateTime.now()) ?: 0
         return UserProfileMapper.toUserProfileResponse(
             userProfile,
+            today,
             calculateRecommendedAmount(userProfile)
         )
     }
@@ -32,8 +38,10 @@ class UserProfileService(
     fun findByUserId(userId: Long): UserProfileResponse {
         val userProfile = userProfileRepository.findByUserId(userId)
             ?: throw ErrorCode.USER_PROFILE_NOT_FOUND.toException()
+        val today = drinkRecordService.getDateAmount(userId, LocalDateTime.now()) ?: 0
         return UserProfileMapper.toUserProfileResponse(
             userProfile,
+            today,
             calculateRecommendedAmount(userProfile)
         )
     }
@@ -53,9 +61,10 @@ class UserProfileService(
 
         // Link profile to user
         user.profile = savedProfile
-
+        val today = drinkRecordService.getDateAmount(request.userId, LocalDateTime.now()) ?: 0
         return UserProfileMapper.toUserProfileResponse(
             savedProfile,
+            today,
             calculateRecommendedAmount(savedProfile)
         )
     }
@@ -66,9 +75,11 @@ class UserProfileService(
             ?: throw ErrorCode.USER_PROFILE_NOT_FOUND.toException()
 
         userProfile.update(request)
-
+        val today =
+            drinkRecordService.getDateAmount(userProfile.user.id!!, LocalDateTime.now()) ?: 0
         return UserProfileMapper.toUserProfileResponse(
             userProfile,
+            today,
             calculateRecommendedAmount(userProfile)
         )
     }

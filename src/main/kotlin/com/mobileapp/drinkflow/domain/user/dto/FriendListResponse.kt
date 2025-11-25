@@ -1,7 +1,7 @@
 package com.mobileapp.drinkflow.domain.user.dto
 
 data class FriendListResponse(
-    val friends: List<FriendResponse>
+    val friends: List<UserDetailResponse>
 )
 
 data class FriendResponse(
