@@ -10,6 +10,7 @@ data class UserProfileResponse(
     val height: Double?,
     val weight: Double?,
     val activityLevel: ActivityLevel,
-    val userId: Long?
+    val userId: Long?,
+    val recommendAmount: Int?,
 )
 

@@ -5,6 +5,7 @@ import com.mobileapp.drinkflow.domain.userProfile.dto.UserProfileCreateRequest
 import com.mobileapp.drinkflow.domain.userProfile.dto.UserProfileResponse
 import com.mobileapp.drinkflow.domain.userProfile.dto.UserProfileUpdateRequest
 import com.mobileapp.drinkflow.domain.userProfile.repository.UserProfileRepository
+import com.mobileapp.drinkflow.domain.userProfile.util.RecommendAmountCalculator.calculateRecommendedAmount
 import com.mobileapp.drinkflow.domain.userProfile.util.UserProfileMapper
 import com.mobileapp.drinkflow.global.exception.ErrorCode
 import org.springframework.data.repository.findByIdOrNull
@@ -21,14 +22,20 @@ class UserProfileService(
     fun findById(id: Long): UserProfileResponse {
         val userProfile = userProfileRepository.findByIdOrNull(id)
             ?: throw ErrorCode.USER_PROFILE_NOT_FOUND.toException()
-        return UserProfileMapper.toUserProfileResponse(userProfile)
+        return UserProfileMapper.toUserProfileResponse(
+            userProfile,
+            calculateRecommendedAmount(userProfile)
+        )
     }
 
     @Transactional(readOnly = true)
     fun findByUserId(userId: Long): UserProfileResponse {
         val userProfile = userProfileRepository.findByUserId(userId)
             ?: throw ErrorCode.USER_PROFILE_NOT_FOUND.toException()
-        return UserProfileMapper.toUserProfileResponse(userProfile)
+        return UserProfileMapper.toUserProfileResponse(
+            userProfile,
+            calculateRecommendedAmount(userProfile)
+        )
     }
 
     @Transactional
@@ -47,7 +54,10 @@ class UserProfileService(
         // Link profile to user
         user.profile = savedProfile
 
-        return UserProfileMapper.toUserProfileResponse(savedProfile)
+        return UserProfileMapper.toUserProfileResponse(
+            savedProfile,
+            calculateRecommendedAmount(savedProfile)
+        )
     }
 
     @Transactional
@@ -57,7 +67,10 @@ class UserProfileService(
 
         userProfile.update(request)
 
-        return UserProfileMapper.toUserProfileResponse(userProfile)
+        return UserProfileMapper.toUserProfileResponse(
+            userProfile,
+            calculateRecommendedAmount(userProfile)
+        )
     }
 
     @Transactional

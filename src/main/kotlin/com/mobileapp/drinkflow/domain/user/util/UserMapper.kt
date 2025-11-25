@@ -5,6 +5,7 @@ import com.mobileapp.drinkflow.domain.user.dto.UserDetailResponse
 import com.mobileapp.drinkflow.domain.user.dto.UserResponse
 import com.mobileapp.drinkflow.domain.user.entity.User
 import com.mobileapp.drinkflow.domain.userProfile.dto.UserProfileResponse
+import com.mobileapp.drinkflow.domain.userProfile.util.RecommendAmountCalculator.calculateRecommendedAmount
 
 object UserMapper {
     fun fromSignupRequest(request: SignupRequest, encodedPassword: String): User {
@@ -36,7 +37,8 @@ object UserMapper {
                     height = it.height,
                     weight = it.weight,
                     activityLevel = it.activityLevel,
-                    userId = user.id
+                    userId = user.id,
+                    recommendAmount = calculateRecommendedAmount(it)
                 )
             }
         )

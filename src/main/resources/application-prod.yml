@@ -27,8 +27,8 @@ springdoc:
 custom:
   jwt:
     expire:
-      access: 3600000
-      refresh: 259200000
+      access: 86400_000 #하루
+      refresh: 259200_000 #3일
     secret-key: ${SECRET_KEY}
   cors:
     origins: ${PRIVATE_ORIGINS}

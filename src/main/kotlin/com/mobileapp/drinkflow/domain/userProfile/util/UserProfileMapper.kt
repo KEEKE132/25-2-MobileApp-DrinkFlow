@@ -17,7 +17,7 @@ object UserProfileMapper {
         )
     }
 
-    fun toUserProfileResponse(userProfile: UserProfile): UserProfileResponse {
+    fun toUserProfileResponse(userProfile: UserProfile, recommendAmount: Int): UserProfileResponse {
         return UserProfileResponse(
             id = userProfile.id,
             age = userProfile.age,
@@ -25,7 +25,8 @@ object UserProfileMapper {
             height = userProfile.height,
             weight = userProfile.weight,
             activityLevel = userProfile.activityLevel,
-            userId = userProfile.user.id
+            userId = userProfile.user.id,
+            recommendAmount = recommendAmount
         )
     }
 }
