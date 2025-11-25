@@ -72,5 +72,7 @@ class DrinkRecordController(
         drinkRecordService.delete(principal.id, id)
         return ResponseEntity.noContent().build()
     }
+
+
 }
 

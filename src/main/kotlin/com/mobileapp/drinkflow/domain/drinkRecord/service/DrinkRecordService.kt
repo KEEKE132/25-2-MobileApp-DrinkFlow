@@ -1,8 +1,6 @@
 package com.mobileapp.drinkflow.domain.drinkRecord.service
 
-import com.mobileapp.drinkflow.domain.drinkRecord.dto.DrinkRecordPageResponse
-import com.mobileapp.drinkflow.domain.drinkRecord.dto.DrinkRecordRequest
-import com.mobileapp.drinkflow.domain.drinkRecord.dto.DrinkRecordResponse
+import com.mobileapp.drinkflow.domain.drinkRecord.dto.*
 import com.mobileapp.drinkflow.domain.drinkRecord.repository.DrinkRecordRepository
 import com.mobileapp.drinkflow.domain.drinkRecord.util.DrinkRecordMapper
 import com.mobileapp.drinkflow.domain.user.repository.UserRepository
@@ -92,5 +90,43 @@ class DrinkRecordService(
 
         return amount
     }
-}
 
+    @Transactional(readOnly = true)
+    fun getTodayRanking(): DailyIntakeRankingPageResponse {
+        val today = LocalDateTime.now().toLocalDate().atStartOfDay()
+        val tomorrow = today.plusDays(1)
+
+        // 전체 사용자의 금일 섭취량 조회
+        val intakeList = drinkRecordRepository.findAllUsersDailyIntakeFirstPage(
+            today,
+            tomorrow
+        )
+
+        // 순위 계산 (동점자 처리)
+        val rankedList = mutableListOf<DailyIntakeRankingResponse>()
+        var currentRank = 1
+        var previousAmount: Int? = null
+
+        intakeList.forEachIndexed { index, intake ->
+            if (previousAmount != null && previousAmount != intake.totalAmount) {
+                currentRank = index + 1
+            }
+
+            rankedList.add(
+                DailyIntakeRankingResponse(
+                    userId = intake.userId,
+                    username = intake.username,
+                    name = intake.name,
+                    totalAmount = intake.totalAmount,
+                    rank = currentRank
+                )
+            )
+
+            previousAmount = intake.totalAmount
+        }
+
+        return DailyIntakeRankingPageResponse(
+            rankings = rankedList
+        )
+    }
+}
